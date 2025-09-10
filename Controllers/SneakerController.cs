@@ -31,7 +31,6 @@ namespace SneakerCollection.Controllers
                 sneakers = _sneakerService.GetAllSneakers();
             }
 
-            // Données pour les filtres
             ViewBag.Brands = Enum.GetValues(typeof(SneakerBrand)).Cast<SneakerBrand>();
             ViewBag.Categories = Enum.GetValues(typeof(SneakerCategory)).Cast<SneakerCategory>();
             ViewBag.Conditions = Enum.GetValues(typeof(SneakerCondition)).Cast<SneakerCondition>();
@@ -65,8 +64,12 @@ namespace SneakerCollection.Controllers
         // POST: Sneaker/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Brand,Model,Colorway,Size,Price,Condition,Category,ReleaseDate,ImageUrl,Description,IsLimited,StockQuantity")] Sneaker sneaker)
+        public IActionResult Create(Sneaker sneaker)
         {
+            // Définir la date d'ajout
+            sneaker.AddedDate = DateTime.Now;
+            ModelState.Remove("AddedDate");
+
             if (ModelState.IsValid)
             {
                 try
@@ -75,13 +78,12 @@ namespace SneakerCollection.Controllers
                     TempData["SuccessMessage"] = $"La sneaker '{sneaker.FullName}' a été ajoutée avec succès !";
                     return RedirectToAction(nameof(Index));
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     ModelState.AddModelError("", "Une erreur s'est produite lors de l'ajout de la sneaker.");
                 }
             }
 
-            // En cas d'erreur, recharger les données pour les dropdowns
             ViewBag.Brands = Enum.GetValues(typeof(SneakerBrand)).Cast<SneakerBrand>();
             ViewBag.Categories = Enum.GetValues(typeof(SneakerCategory)).Cast<SneakerCategory>();
             ViewBag.Conditions = Enum.GetValues(typeof(SneakerCondition)).Cast<SneakerCondition>();
@@ -109,13 +111,21 @@ namespace SneakerCollection.Controllers
         // POST: Sneaker/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("Id,Brand,Model,Colorway,Size,Price,Condition,Category,ReleaseDate,ImageUrl,Description,IsLimited,StockQuantity")] Sneaker sneaker)
+        public IActionResult Edit(int id, Sneaker sneaker)
         {
             if (id != sneaker.Id)
             {
                 TempData["ErrorMessage"] = "Identifiant de sneaker invalide.";
                 return RedirectToAction(nameof(Index));
             }
+
+            // Préserver l'AddedDate original
+            var originalSneaker = _sneakerService.GetSneakerById(id);
+            if (originalSneaker != null)
+            {
+                sneaker.AddedDate = originalSneaker.AddedDate;
+            }
+            ModelState.Remove("AddedDate");
 
             if (ModelState.IsValid)
             {
@@ -125,13 +135,12 @@ namespace SneakerCollection.Controllers
                     TempData["SuccessMessage"] = $"La sneaker '{sneaker.FullName}' a été modifiée avec succès !";
                     return RedirectToAction(nameof(Details), new { id = sneaker.Id });
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     ModelState.AddModelError("", "Une erreur s'est produite lors de la modification de la sneaker.");
                 }
             }
 
-            // En cas d'erreur, recharger les données pour les dropdowns
             ViewBag.Brands = Enum.GetValues(typeof(SneakerBrand)).Cast<SneakerBrand>();
             ViewBag.Categories = Enum.GetValues(typeof(SneakerCategory)).Cast<SneakerCategory>();
             ViewBag.Conditions = Enum.GetValues(typeof(SneakerCondition)).Cast<SneakerCondition>();
@@ -194,7 +203,5 @@ namespace SneakerCollection.Controllers
         {
             return RedirectToAction(nameof(Index), new { searchTerm, brand, category, condition });
         }
-
-
     }
 }

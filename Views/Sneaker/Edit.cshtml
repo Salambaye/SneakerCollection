@@ -1,4 +1,4 @@
-﻿@* @model Sneaker
+﻿@model Sneaker
 @{
     ViewData["Title"] = $"Modifier - {Model.FullName}";
 }
@@ -39,372 +39,8 @@
                 <div class="card-body p-4">
                     <form asp-action="Edit" method="post" novalidate>
                         <input asp-for="Id" type="hidden" />
-                        <div asp-validation-summary="ModelOnly" class="alert alert-danger alert-custom" role="alert"></div>
-
-                        <div class="row g-4">
-                            <!-- Section Identification -->
-                            <div class="col-12">
-                                <h5 class="border-bottom pb-2 mb-3">
-                                    <i class="bi bi-tag-fill text-primary me-2"></i>Identification
-                                </h5>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label asp-for="Brand" class="form-label fw-semibold">
-                                    <i class="bi bi-bookmark-fill me-1"></i>Marque
-                                </label>
-                                <select asp-for="Brand" class="form-select" asp-items="Html.GetEnumSelectList<SneakerBrand>()">
-                                </select>
-                                <span asp-validation-for="Brand" class="text-danger small"></span>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label asp-for="Model" class="form-label fw-semibold">
-                                    <i class="bi bi-card-text me-1"></i>Modèle
-                                </label>
-                                <input asp-for="Model" class="form-control" placeholder="ex: Air Jordan 1, Air Max 90...">
-                                <span asp-validation-for="Model" class="text-danger small"></span>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label asp-for="Colorway" class="form-label fw-semibold">
-                                    <i class="bi bi-palette-fill me-1"></i>Colorway
-                                </label>
-                                <input asp-for="Colorway" class="form-control" placeholder="ex: Chicago, Bred, Triple White...">
-                                <span asp-validation-for="Colorway" class="text-danger small"></span>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label asp-for="Category" class="form-label fw-semibold">
-                                    <i class="bi bi-grid-fill me-1"></i>Catégorie
-                                </label>
-                                <select asp-for="Category" class="form-select" asp-items="Html.GetEnumSelectList<SneakerCategory>()">
-                                </select>
-                                <span asp-validation-for="Category" class="text-danger small"></span>
-                            </div>
-
-                            <!-- Section Détails Techniques -->
-                            <div class="col-12 mt-5">
-                                <h5 class="border-bottom pb-2 mb-3">
-                                    <i class="bi bi-gear-fill text-success me-2"></i>Détails Techniques
-                                </h5>
-                            </div>
-
-                            <div class="col-md-4">
-                                <label asp-for="Size" class="form-label fw-semibold">
-                                    <i class="bi bi-rulers me-1"></i>Taille (US)
-                                </label>
-                                <input asp-for="Size" type="number" step="0.5" min="3" max="18" class="form-control">
-                                <span asp-validation-for="Size" class="text-danger small"></span>
-                            </div>
-
-                            <div class="col-md-4">
-                                <label asp-for="Price" class="form-label fw-semibold">
-                                    <i class="bi bi-currency-euro me-1"></i>Prix (€)
-                                </label>
-                                <input asp-for="Price" type="number" step="0.01" min="0.01" class="form-control">
-                                <span asp-validation-for="Price" class="text-danger small"></span>
-                            </div>
-
-                            <div class="col-md-4">
-                                <label asp-for="Condition" class="form-label fw-semibold">
-                                    <i class="bi bi-award-fill me-1"></i>État
-                                </label>
-                                <select asp-for="Condition" class="form-select" asp-items="Html.GetEnumSelectList<SneakerCondition>()">
-                                </select>
-                                <span asp-validation-for="Condition" class="text-danger small"></span>
-                            </div>
-
-                            <!-- Section Dates et Stock -->
-                            <div class="col-12 mt-5">
-                                <h5 class="border-bottom pb-2 mb-3">
-                                    <i class="bi bi-calendar-fill text-warning me-2"></i>Dates et Inventaire
-                                </h5>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label asp-for="ReleaseDate" class="form-label fw-semibold">
-                                    <i class="bi bi-calendar3 me-1"></i>Date de sortie
-                                </label>
-                                <input asp-for="ReleaseDate" type="date" class="form-control">
-                                <span asp-validation-for="ReleaseDate" class="text-danger small"></span>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label asp-for="StockQuantity" class="form-label fw-semibold">
-                                    <i class="bi bi-box-seam me-1"></i>Quantité en stock
-                                </label>
-                                <input asp-for="StockQuantity" type="number" min="0" max="1000" class="form-control">
-                                <span asp-validation-for="StockQuantity" class="text-danger small"></span>
-                            </div>
-
-                            <!-- Section Médias et Description -->
-                            <div class="col-12 mt-5">
-                                <h5 class="border-bottom pb-2 mb-3">
-                                    <i class="bi bi-image-fill text-info me-2"></i>Médias et Description
-                                </h5>
-                            </div>
-
-                            <div class="col-12">
-                                <label asp-for="ImageUrl" class="form-label fw-semibold">
-                                    <i class="bi bi-link-45deg me-1"></i>URL de l'image
-                                </label>
-                                <input asp-for="ImageUrl" type="url" class="form-control">
-                                <span asp-validation-for="ImageUrl" class="text-danger small"></span>
-                                
-                                @if (!string.IsNullOrEmpty(Model.ImageUrl))
-                                {
-                                    <div class="mt-2">
-                                        <small class="text-muted">Image actuelle :</small><br>
-                                        <img src="@Model.DisplayImageUrl" alt="@Model.FullName" 
-                                             class="img-thumbnail mt-1" style="max-width: 150px; max-height: 100px;">
-                                    </div>
-                                }
-                            </div>
-
-                            <div class="col-12">
-                                <label asp-for="Description" class="form-label fw-semibold">
-                                    <i class="bi bi-text-paragraph me-1"></i>Description
-                                </label>
-                                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
-                                <span asp-validation-for="Description" class="text-danger small"></span>
-                                <div class="form-text">
-                                    <span id="descriptionCount">@(Model.Description?.Length ?? 0)</span>/500 caractères
-                                </div>
-                            </div>
-
-                            <!-- Section Options -->
-                            <div class="col-12 mt-5">
-                                <h5 class="border-bottom pb-2 mb-3">
-                                    <i class="bi bi-toggles me-2"></i>Options
-                                </h5>
-                            </div>
-
-                            <div class="col-12">
-                                <div class="form-check form-switch">
-                                    <input asp-for="IsLimited" class="form-check-input" type="checkbox" role="switch">
-                                    <label asp-for="IsLimited" class="form-check-label fw-semibold">
-                                        <i class="bi bi-lightning-fill me-1"></i>Édition limitée
-                                    </label>
-                                </div>
-                            </div>
-
-                            <!-- Section Métadonnées (lecture seule) -->
-                            <div class="col-12 mt-5">
-                                <h5 class="border-bottom pb-2 mb-3">
-                                    <i class="bi bi-info-circle-fill text-secondary me-2"></i>Informations Système
-                                </h5>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold text-muted">
-                                    <i class="bi bi-hash me-1"></i>ID
-                                </label>
-                                <input type="text" class="form-control" value="#@Model.Id.ToString("000")" readonly>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold text-muted">
-                                    <i class="bi bi-clock me-1"></i>Ajoutée le
-                                </label>
-                                <input type="text" class="form-control" value="@Model.AddedDate.ToString("dd/MM/yyyy à HH:mm")" readonly>
-                            </div>
-                        </div>
-
-                        <!-- Actions -->
-                        <div class="row mt-5 pt-4 border-top">
-                            <div class="col-12">
-                                <div class="d-flex gap-3 justify-content-between">
-                                    <div class="d-flex gap-2">
-                                        <a href="@Url.Action("Details", new { id = Model.Id })" class="btn btn-outline-secondary btn-lg">
-                                            <i class="bi bi-arrow-left me-2"></i>Annuler
-                                        </a>
-                                        <a href="@Url.Action("Index")" class="btn btn-outline-secondary btn-lg">
-                                            <i class="bi bi-collection me-2"></i>Retour Collection
-                                        </a>
-                                    </div>
-                                    
-                                    <div class="d-flex gap-2">
-                                        <button type="reset" class="btn btn-outline-warning btn-lg" onclick="resetToOriginal()">
-                                            <i class="bi bi-arrow-clockwise me-2"></i>Annuler Modifications
-                                        </button>
-                                        <button type="submit" class="btn btn-primary-custom btn-lg" onclick="showLoading(this)">
-                                            <i class="bi bi-check-lg me-2"></i>Sauvegarder
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Historique des modifications (simulé) -->
-            <div class="card card-custom mt-4">
-                <div class="card-header">
-                    <h6 class="mb-0">
-                        <i class="bi bi-clock-history me-2"></i>Historique
-                    </h6>
-                </div>
-                <div class="card-body">
-                    <div class="timeline">
-                        <div class="d-flex align-items-center">
-                            <div class="flex-shrink-0">
-                                <div class="bg-success rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
-                                    <i class="bi bi-plus text-white"></i>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <h6 class="mb-1">Sneaker ajoutée</h6>
-                                <small class="text-muted">@Model.AddedDate.ToString("dd/MM/yyyy à HH:mm")</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-
-    <script>
-        // Stocker les valeurs originales du formulaire pour la réinitialisation
-        var originalFormData = {};
-        var formChanged = false;
-
-        $(document).ready(function() {
-            // Sauvegarder les valeurs originales
-            $('form').find('input, select, textarea').each(function() {
-                var field = $(this);
-                if (field.attr('type') === 'checkbox') {
-                    originalFormData[field.attr('name')] = field.prop('checked');
-                } else {
-                    originalFormData[field.attr('name')] = field.val();
-                }
-            });
-
-            // Détecter les modifications pour alerte avant quitter
-            $('form').find('input, select, textarea').on('change input', function() {
-                formChanged = true;
-            });
-
-            $(window).on('beforeunload', function() {
-                if (formChanged) {
-                    return 'Vous avez des modifications non enregistrées. Êtes-vous sûr de vouloir quitter ?';
-                }
-            });
-
-            // Confirmation avant soumission
-            $('form').on('submit', function() {
-                formChanged = false; // Pas besoin d'alerte après soumission
-                return confirm('Êtes-vous sûr de vouloir enregistrer ces modifications ?');
-            });
-
-            // Mise à jour de l'aperçu image quand on change l'URL
-            $('#ImageUrl').on('blur input', function() {
-                updateImagePreview();
-            });
-
-            // Formatage automatique du prix (2 décimales)
-            $('#Price').on('blur', function() {
-                var value = parseFloat($(this).val());
-                if (!isNaN(value)) {
-                    $(this).val(value.toFixed(2));
-                }
-            });
-        });
-
-        // Fonction pour réinitialiser le formulaire aux valeurs originales
-        function resetForm() {
-            if (!confirm('Êtes-vous sûr de vouloir réinitialiser toutes les modifications ?')) return;
-
-            for (var name in originalFormData) {
-                var field = $('[name="' + name + '"]');
-                if (field.length > 0) {
-                    if (field.attr('type') === 'checkbox') {
-                        field.prop('checked', originalFormData[name]);
-                    } else {
-                        field.val(originalFormData[name]);
-                    }
-                }
-            }
-
-            updateImagePreview();
-            formChanged = false;
-        }
-
-        // Mettre à jour l'aperçu de l'image
-        function updateImagePreview() {
-            var imageUrl = $('#ImageUrl').val();
-            var currentImg = $('#imagePreview');
-
-            if (imageUrl && currentImg.length > 0) {
-                var tempImg = new Image();
-                tempImg.onload = function() {
-                    currentImg.attr('src', imageUrl);
-                };
-                tempImg.onerror = function() {
-                    currentImg.attr('src', '/images/placeholder.png'); // mettre un placeholder si l'image n'existe pas
-                };
-                tempImg.src = imageUrl;
-            }
-        }
-
-        // Fonction d'affichage du loader sur le bouton submit (optionnel)
-        function showLoading(button) {
-            button.disabled = true;
-            button.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Enregistrement...';
-        }
-    </script>
-}
-
- *@
-
-@model Sneaker
-@{
-    ViewData["Title"] = $"Modifier - {Model.FullName}";
-}
-
-<div class="container py-4">
-    <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb" class="mb-4">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="@Url.Action("Index", "Home")" class="text-decoration-none">
-                    <i class="bi bi-house-fill me-1"></i>Accueil
-                </a>
-            </li>
-            <li class="breadcrumb-item">
-                <a href="@Url.Action("Index")" class="text-decoration-none">Collection</a>
-            </li>
-            <li class="breadcrumb-item">
-                <a href="@Url.Action("Details", new { id = Model.Id })" class="text-decoration-none">@Model.Model</a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">Modifier</li>
-        </ol>
-    </nav>
-
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <!-- Header -->
-            <div class="text-center mb-5">
-                <h1 class="display-6 fw-bold mb-3">
-                    <i class="bi bi-pencil-square text-primary me-3"></i>Modifier la Sneaker
-                </h1>
-                <p class="text-muted">
-                    Modifiez les informations de <strong>@Model.FullName</strong>
-                </p>
-            </div>
-
-            <!-- Formulaire -->
-            <div class="card card-custom">
-                <div class="card-body p-4">
-                    <form asp-action="Edit" method="post" novalidate>
-                        <input asp-for="Id" type="hidden" />
+                        <!-- Ajout du champ AddedDate en hidden pour éviter la perte -->
+                        <input asp-for="AddedDate" type="hidden" />
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger alert-custom" role="alert"></div>
 
                         <div class="row g-4">
@@ -532,7 +168,7 @@
                                 <label asp-for="Description" class="form-label fw-semibold">
                                     <i class="bi bi-text-paragraph me-1"></i>Description
                                 </label>
-                                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                                <textarea asp-for="Description" class="form-control" rows="4" maxlength="500"></textarea>
                                 <span asp-validation-for="Description" class="text-danger small"></span>
                                 <div class="form-text">
                                     <span id="descriptionCount">@(Model.Description?.Length ?? 0)</span>/500 caractères
@@ -594,7 +230,7 @@
                                         <button type="button" class="btn btn-outline-warning btn-lg" onclick="resetForm()">
                                             <i class="bi bi-arrow-clockwise me-2"></i>Annuler Modifications
                                         </button>
-                                        <button type="submit" class="btn btn-primary-custom btn-lg" onclick="showLoading(this)">
+                                        <button type="submit" class="btn btn-primary-custom btn-lg" id="submitBtn">
                                             <i class="bi bi-check-lg me-2"></i>Sauvegarder
                                         </button>
                                     </div>
@@ -640,6 +276,7 @@
     <script>
         var originalFormData = {};
         var formChanged = false;
+        var isSubmitting = false;
 
         $(document).ready(function() {
             // Stocker les valeurs originales
@@ -654,55 +291,188 @@
 
             // Détecter modifications
             $('form').find('input, select, textarea').on('change input', function() {
-                formChanged = true;
+                if (!isSubmitting) {
+                    formChanged = true;
+                }
+
+                // Compteur de caractères pour la description
+                if ($(this).attr('name') === 'Description') {
+                    updateDescriptionCount();
+                }
             });
 
-            // Alerte avant quitter
-            $(window).on('beforeunload', function() {
-                if (formChanged) return 'Vous avez des modifications non enregistrées.';
+            // Alerte avant quitter (seulement si des modifications)
+            $(window).on('beforeunload', function(e) {
+                if (formChanged && !isSubmitting) {
+                    return 'Vous avez des modifications non enregistrées.';
+                }
             });
 
-            // Aperçu image et formatage prix
+            // Aperçu image
             $('#ImageUrl').on('blur input', updateImagePreview);
+
+            // Formatage prix
             $('#Price').on('blur', function() {
                 var value = parseFloat($(this).val());
-                if (!isNaN(value)) $(this).val(value.toFixed(2));
+                if (!isNaN(value) && value > 0) {
+                    $(this).val(value.toFixed(2));
+                }
             });
 
-            // Confirmation avant submit
-            $('form').on('submit', function() {
-                formChanged = false;
-                return confirm('Êtes-vous sûr de vouloir enregistrer ces modifications ?');
+            // Gestion de la soumission du formulaire
+            $('form').on('submit', function(e) {
+                if (isSubmitting) {
+                    e.preventDefault();
+                    return false;
+                }
+
+                // Validation côté client
+                if (!validateForm()) {
+                    e.preventDefault();
+                    return false;
+                }
+
+                if (confirm('Êtes-vous sûr de vouloir enregistrer ces modifications ?')) {
+                    isSubmitting = true;
+                    formChanged = false;
+                    showLoading();
+                    return true;
+                } else {
+                    e.preventDefault();
+                    return false;
+                }
             });
+
+            // Initialiser le compteur de description
+            updateDescriptionCount();
         });
+
+        function validateForm() {
+            var isValid = true;
+            var firstErrorField = null;
+
+            // Validation des champs obligatoires
+            $('form').find('[data-val-required]').each(function() {
+                var field = $(this);
+                var value = field.val().trim();
+
+                if (!value) {
+                    showFieldError(field, 'Ce champ est obligatoire');
+                    if (!firstErrorField) firstErrorField = field;
+                    isValid = false;
+                } else {
+                    hideFieldError(field);
+                }
+            });
+
+            // Validation spécifique pour le prix
+            var priceField = $('#Price');
+            var price = parseFloat(priceField.val());
+            if (priceField.val() && (isNaN(price) || price <= 0)) {
+                showFieldError(priceField, 'Le prix doit être supérieur à 0');
+                if (!firstErrorField) firstErrorField = priceField;
+                isValid = false;
+            }
+
+            // Validation pour la taille
+            var sizeField = $('#Size');
+            var size = parseFloat(sizeField.val());
+            if (sizeField.val() && (isNaN(size) || size < 3 || size > 18)) {
+                showFieldError(sizeField, 'La taille doit être entre 3 et 18');
+                if (!firstErrorField) firstErrorField = sizeField;
+                isValid = false;
+            }
+
+            // Focus sur le premier champ en erreur
+            if (firstErrorField) {
+                firstErrorField.focus();
+                $('html, body').animate({
+                    scrollTop: firstErrorField.offset().top - 100
+                }, 500);
+            }
+
+            return isValid;
+        }
+
+        function showFieldError(field, message) {
+            var errorSpan = field.siblings('.text-danger');
+            if (errorSpan.length === 0) {
+                errorSpan = $('<span class="text-danger small"></span>');
+                field.after(errorSpan);
+            }
+            errorSpan.text(message);
+            field.addClass('is-invalid');
+        }
+
+        function hideFieldError(field) {
+            field.removeClass('is-invalid');
+            field.siblings('.text-danger').text('');
+        }
 
         function resetForm() {
             if (!confirm('Êtes-vous sûr de vouloir réinitialiser toutes les modifications ?')) return;
+
             for (var name in originalFormData) {
                 var field = $('[name="' + name + '"]');
                 if (field.length > 0) {
-                    if (field.attr('type') === 'checkbox') field.prop('checked', originalFormData[name]);
-                    else field.val(originalFormData[name]);
+                    if (field.attr('type') === 'checkbox') {
+                        field.prop('checked', originalFormData[name]);
+                    } else {
+                        field.val(originalFormData[name]);
+                    }
+                    // Nettoyer les erreurs
+                    hideFieldError(field);
                 }
             }
+
             updateImagePreview();
+            updateDescriptionCount();
             formChanged = false;
         }
 
         function updateImagePreview() {
             var imageUrl = $('#ImageUrl').val();
             var currentImg = $('#imagePreview');
+
             if (imageUrl && currentImg.length > 0) {
                 var tempImg = new Image();
-                tempImg.onload = function() { currentImg.attr('src', imageUrl); };
-                tempImg.onerror = function() { currentImg.attr('src', '/images/placeholder.png'); };
+                tempImg.onload = function() {
+                    currentImg.attr('src', imageUrl);
+                };
+                tempImg.onerror = function() {
+                    currentImg.attr('src', '/images/placeholder.png');
+                };
                 tempImg.src = imageUrl;
             }
         }
 
-        function showLoading(button) {
-            button.disabled = true;
-            button.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Enregistrement...';
+        function updateDescriptionCount() {
+            var description = $('#Description').val();
+            var count = description ? description.length : 0;
+            $('#descriptionCount').text(count);
+
+            // Changer la couleur si proche de la limite
+            if (count > 450) {
+                $('#descriptionCount').removeClass('text-muted').addClass('text-warning');
+            } else if (count >= 500) {
+                $('#descriptionCount').removeClass('text-warning').addClass('text-danger');
+            } else {
+                $('#descriptionCount').removeClass('text-warning text-danger').addClass('text-muted');
+            }
+        }
+
+        function showLoading() {
+            var submitBtn = $('#submitBtn');
+            submitBtn.prop('disabled', true);
+            submitBtn.html('<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Enregistrement...');
+        }
+
+        // Fonction pour réactiver le bouton en cas d'erreur (appelée depuis le serveur si nécessaire)
+        function resetSubmitButton() {
+            var submitBtn = $('#submitBtn');
+            submitBtn.prop('disabled', false);
+            submitBtn.html('<i class="bi bi-check-lg me-2"></i>Sauvegarder');
+            isSubmitting = false;
         }
     </script>
 }
