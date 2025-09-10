@@ -1,8 +1,247 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using SneakerCollection.Controllers
+@model HomeViewModel
+@{
+    ViewData["Title"] = "Accueil";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- Section Hero -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-4">
+                    Votre Collection de <span class="text-gradient">Sneakers</span>
+                </h1>
+                <p class="lead mb-4">
+                    Découvrez, gérez et organisez votre passion pour les sneakers avec notre plateforme moderne et intuitive.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="@Url.Action("Index", "Sneaker")" class="btn btn-primary-custom btn-lg">
+                        <i class="bi bi-grid-fill me-2"></i>Explorer la Collection
+                    </a>
+                    <a href="@Url.Action("Create", "Sneaker")" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-plus-lg me-2"></i>Ajouter une Sneaker
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center">
+                <div class="position-relative">
+                    <i class="bi bi-lightning-charge-fill text-white" style="font-size: 8rem; opacity: 0.1;"></i>
+                    <div class="position-absolute top-50 start-50 translate-middle">
+                        <div class="badge bg-primary fs-1 rounded-circle p-4">
+                            @Model.TotalSneakers
+                        </div>
+                        <div class="text-white mt-2">
+                            <small>Sneakers en collection</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container py-5">
+
+    @if (Model.FeaturedSneakers.Any())
+    {
+        <!-- Section Sneakers Premium -->
+        <section class="mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="h3 fw-bold">
+                    <i class="bi bi-star-fill text-warning me-2"></i>Sneakers Premium
+                </h2>
+                <a href="@Url.Action("Index", "Sneaker")" class="btn btn-outline-custom">
+                    Voir tout <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+            </div>
+
+            <div class="row g-4">
+                @foreach (var sneaker in Model.FeaturedSneakers)
+                {
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card card-custom h-100">
+                            <img src="@sneaker.DisplayImageUrl" class="card-img-top sneaker-image" alt="@sneaker.FullName" onerror="this.src='https://via.placeholder.com/300x200/f8f9fa/6c757d?text=Sneaker'">
+
+                            <div class="card-body d-flex flex-column">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                   <span class="badge-custom @sneaker.ConditionBadgeClass">@sneaker.Condition.GetDisplayName()</span>
+                                    @if (sneaker.IsLimited)
+                                    {
+                                        <span class="badge bg-warning text-dark">
+                                            <i class="bi bi-lightning-fill"></i> Limited
+                                        </span>
+                                    }
+                                </div>
+
+                                <h5 class="card-title fw-bold">@sneaker.Model</h5>
+                                <p class="text-muted mb-2">@sneaker.Brand - "@sneaker.Colorway"</p>
+
+                                <div class="mt-auto">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="price-tag">@sneaker.Price.ToString("C")</span>
+                                        <span class="text-muted small">Taille @sneaker.Size</span>
+                                    </div>
+
+                                    <div class="d-flex gap-2 mt-3">
+                                        <a href="@Url.Action("Details", "Sneaker", new { id = sneaker.Id })" class="btn btn-primary-custom btn-sm flex-grow-1">
+                                            <i class="bi bi-eye-fill me-1"></i>Détails
+                                        </a>
+                                        <a href="@Url.Action("Edit", "Sneaker", new { id = sneaker.Id })" class="btn btn-outline-secondary btn-sm">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </section>
+    }
+
+    @if (Model.RecentSneakers.Any())
+    {
+        <!-- Section Ajouts Récents -->
+        <section class="mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="h3 fw-bold">
+                    <i class="bi bi-clock-fill text-primary me-2"></i>Ajouts Récents
+                </h2>
+                <a href="@Url.Action("Search", "Sneaker")" class="btn btn-outline-custom">
+                    Rechercher <i class="bi bi-search ms-1"></i>
+                </a>
+            </div>
+
+            <div class="row g-4">
+                @foreach (var sneaker in Model.RecentSneakers)
+                {
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card card-custom">
+                            <div class="row g-0">
+                                <div class="col-4">
+                                    <img src="@sneaker.DisplayImageUrl" class="img-fluid h-100" style="object-fit: cover; border-radius: 12px 0 0 12px;" alt="@sneaker.FullName" onerror="this.src='https://via.placeholder.com/120x120/f8f9fa/6c757d?text=👟'">
+                                </div>
+                                <div class="col-8">
+                                    <div class="card-body">
+                                        <h6 class="card-title fw-bold mb-1">@sneaker.Model</h6>
+                                        <p class="text-muted small mb-2">@sneaker.Brand "@sneaker.Colorway"</p>
+
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="price-tag small">@sneaker.Price.ToString("C")</span>
+                                            <span class="@sneaker.ConditionBadgeClass" style="font-size: 0.7rem;">@sneaker.Condition.GetDisplayName()</span>
+                                        </div>
+
+                                        <div class="mt-2">
+                                            <a href="@Url.Action("Details", "Sneaker", new { id = sneaker.Id })" class="btn btn-primary-custom btn-sm btn-sm">
+                                                <i class="bi bi-arrow-right me-1"></i>Voir
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </section>
+    }
+
+    <!-- Section Actions Rapides -->
+    <section class="mb-5">
+        <div class="card card-custom">
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <div class="p-3">
+                            <i class="bi bi-plus-circle-fill text-primary" style="font-size: 2.5rem;"></i>
+                            <h5 class="mt-3 mb-2">Ajouter une Sneaker</h5>
+                            <p class="text-muted mb-3">Enrichissez votre collection avec de nouveaux modèles</p>
+                            <a href="@Url.Action("Create", "Sneaker")" class="btn btn-primary-custom">
+                                <i class="bi bi-plus-lg me-2"></i>Ajouter
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <div class="p-3">
+                            <i class="bi bi-search text-warning" style="font-size: 2.5rem;"></i>
+                            <h5 class="mt-3 mb-2">Recherche Avancée</h5>
+                            <p class="text-muted mb-3">Trouvez rapidement la sneaker que vous cherchez</p>
+                            <a href="@Url.Action("Search", "Sneaker")" class="btn btn-outline-custom">
+                                <i class="bi bi-search me-2"></i>Rechercher
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="p-3">
+                            <i class="bi bi-grid-3x3-gap-fill text-success" style="font-size: 2.5rem;"></i>
+                            <h5 class="mt-3 mb-2">Collection Complète</h5>
+                            <p class="text-muted mb-3">Parcourez toutes vos sneakers en un coup d'œil</p>
+                            <a href="@Url.Action("Index", "Sneaker")" class="btn btn-outline-custom">
+                                <i class="bi bi-grid-fill me-2"></i>Explorer
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Statistiques -->
+    <section>
+        <div class="row g-4">
+            <div class="col-md-3 col-sm-6">
+                <div class="card card-custom text-center">
+                    <div class="card-body">
+                        <i class="bi bi-collection text-primary" style="font-size: 2rem;"></i>
+                        <h4 class="mt-2 mb-1 fw-bold">@Model.TotalSneakers</h4>
+                        <p class="text-muted mb-0">Sneakers Total</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6">
+                <div class="card card-custom text-center">
+                    <div class="card-body">
+                        <i class="bi bi-star-fill text-warning" style="font-size: 2rem;"></i>
+                        <h4 class="mt-2 mb-1 fw-bold">@Model.FeaturedSneakers.Count()</h4>
+                        <p class="text-muted mb-0">Premium</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6">
+                <div class="card card-custom text-center">
+                    <div class="card-body">
+                        <i class="bi bi-lightning-fill text-danger" style="font-size: 2rem;"></i>
+                        <h4 class="mt-2 mb-1 fw-bold">@Model.FeaturedSneakers.Count(s => s.IsLimited)</h4>
+                        <p class="text-muted mb-0">Éditions Limitées</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6">
+                <div class="card card-custom text-center">
+                    <div class="card-body">
+                        <i class="bi bi-clock-fill text-success" style="font-size: 2rem;"></i>
+                        <h4 class="mt-2 mb-1 fw-bold">@Model.RecentSneakers.Count()</h4>
+                        <p class="text-muted mb-0">Récents</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
+
+@section Scripts {
+    <script>
+        // Extension pour les Display Names
+        if (!String.prototype.getDisplayName) {
+            String.prototype.getDisplayName = function() {
+                return this.replace(/([A-Z])/g, ' $1').trim();
+            };
+        }
+    </script>
+}
