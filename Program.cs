@@ -1,7 +1,11 @@
+using SneakerCollection.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Ajouter notre service de sneakers
+builder.Services.AddSingleton<ISneakerService, SneakerService>();
 
 var app = builder.Build();
 
