@@ -61,7 +61,6 @@ _Detailed view of a sneaker with system information_
 
 This project is for educational purposes and course submission. All rights reserved by the developer.
 
----
 
 **Professor:** Prof. Marcel Stefan Wagner, PhD  
 **Developer:** Salamata Nourou MBAYE - ESTIAM - E5 Web And Mobile Development
