@@ -36,7 +36,8 @@ This project is a web application developed using **ASP.NET Core MVC**, **C#**, 
 
 ## Screenshots
 
-![Home Page](screenshots/home.png)  
+![Home Page] (<img width="1212" height="865" alt="Home" src="https://github.com/user-attachments/assets/c2641da3-028c-4aa5-ba81-bc185c30ca04" />)
+
 _Home page displaying sneaker collection_
 
 ![Add Sneaker](screenshots/add_sneaker.png)  
