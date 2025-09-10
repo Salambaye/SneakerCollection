@@ -36,35 +36,42 @@ This project is a web application developed using **ASP.NET Core MVC**, **C#**, 
 
 ## Screenshots
 
-![Home]
+_Home page displaying sneaker collection_
+
 <img width="1212" height="865" alt="Home" src="https://github.com/user-attachments/assets/c2641da3-028c-4aa5-ba81-bc185c30ca04" />
 <img width="1026" height="881" alt="Home2" src="https://github.com/user-attachments/assets/80c79fef-4e64-4db1-837c-7b32190370e4" />
 
-_Home page displaying sneaker collection_
+---
 
 
-![Add Sneaker](screenshots/add_sneaker.png)  
 _Add new sneaker form with validations_
+<img width="988" height="863" alt="Create-1" src="https://github.com/user-attachments/assets/c26dad18-8897-46a4-bb49-deabafb58b14" />
 
 
-![Edit Sneaker]
+<img width="862" height="867" alt="Create-2" src="https://github.com/user-attachments/assets/7303b0a5-e74d-4f33-aa3c-24b338453c14" />
+
+---
+
+_Edit form including image preview and reset button_
 <img width="860" height="813" alt="Update1" src="https://github.com/user-attachments/assets/c867d660-9f9c-4d00-9ecc-386efd19cdfd" />
 <img width="641" height="858" alt="Update2" src="https://github.com/user-attachments/assets/83585ec0-d894-4847-adcc-56b73793ae79" />
 <img width="1492" height="817" alt="Update3" src="https://github.com/user-attachments/assets/caf8c1f8-6321-45d5-ba94-bc2a5ca885f1" />
 
-_Edit form including image preview and reset button_
 
 
-![View Sneaker]
- <img width="1367" height="887" alt="Details" src="https://github.com/user-attachments/assets/71dc7ac2-7e09-49db-9918-5c345131195d" />
+---
 
 _Detailed view of a sneaker with system information_
+ <img width="1367" height="887" alt="Details" src="https://github.com/user-attachments/assets/71dc7ac2-7e09-49db-9918-5c345131195d" />
 
 
-![Search a Sneaker]
+
+---
+
+_Research of a sneaker_ 
 <img width="1307" height="857" alt="Search1" src="https://github.com/user-attachments/assets/b9cc1d7d-ad6e-46ca-aa30-67c1c7575bfa" />
 <img width="1303" height="823" alt="Search2" src="https://github.com/user-attachments/assets/91063fb3-fd00-4ba8-8757-4f1923ffc693" />
-_Research of a sneaker_  
+ 
 
 
 
