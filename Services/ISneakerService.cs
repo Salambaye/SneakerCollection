@@ -11,5 +11,7 @@ namespace SneakerCollection.Services
         void DeleteSneaker(int id);
         IEnumerable<Sneaker> SearchSneakers(string? searchTerm, SneakerBrand? brand, SneakerCategory? category, SneakerCondition? condition);
         int GetNextId();
+        IEnumerable<Sneaker> GetFeaturedSneakers();
+        IEnumerable<Sneaker> GetRecentSneakers(int v);
     }
 }
