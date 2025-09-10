@@ -1,0 +1,299 @@
+﻿@model IEnumerable<Sneaker>
+@{
+    ViewData["Title"] = "Ma Collection";
+    var searchTerm = ViewBag.SearchTerm as string;
+    var selectedBrand = ViewBag.SelectedBrand as SneakerBrand?;
+    var selectedCategory = ViewBag.SelectedCategory as SneakerCategory?;
+    var selectedCondition = ViewBag.SelectedCondition as SneakerCondition?;
+    var hasFilters = !string.IsNullOrEmpty(searchTerm) || selectedBrand.HasValue || selectedCategory.HasValue || selectedCondition.HasValue;
+}
+
+<div class="container py-4">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h2 fw-bold mb-1">
+                <i class="bi bi-collection-fill text-primary me-2"></i>Ma Collection
+            </h1>
+            <p class="text-muted">
+                @Model.Count() sneaker@(Model.Count() > 1 ? "s" : "") 
+                @if (hasFilters)
+                {
+                    <span>trouvée@(Model.Count() > 1 ? "s" : "") avec les filtres appliqués</span>
+                }
+            </p>
+        </div>
+        <div>
+            <a href="@Url.Action("Create")" class="btn btn-primary-custom">
+                <i class="bi bi-plus-lg me-2"></i>Ajouter une Sneaker
+            </a>
+        </div>
+    </div>
+
+    <!-- Filtres de Recherche -->
+    <div class="card card-custom mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <label for="searchTerm" class="form-label">
+                        <i class="bi bi-search me-1"></i>Recherche
+                    </label>
+                    <input type="text" class="form-control search-bar" id="searchTerm" name="searchTerm" 
+                           value="@searchTerm" placeholder="Modèle, marque, colorway...">
+                </div>
+                
+                <div class="col-md-2">
+                    <label for="brand" class="form-label">
+                        <i class="bi bi-tag-fill me-1"></i>Marque
+                    </label>
+                    <select class="form-select" id="brand" name="brand">
+                        <option value="">Toutes</option>
+                        @foreach (SneakerBrand brand in ViewBag.Brands)
+                        {
+                            <option value="@brand" selected="@(selectedBrand == brand)">@brand.GetDisplayName()</option>
+                        }
+                    </select>
+                </div>
+                
+                <div class="col-md-2">
+                    <label for="category" class="form-label">
+                        <i class="bi bi-grid-fill me-1"></i>Catégorie
+                    </label>
+                    <select class="form-select" id="category" name="category">
+                        <option value="">Toutes</option>
+                        @foreach (SneakerCategory category in ViewBag.Categories)
+                        {
+                            <option value="@category" selected="@(selectedCategory == category)">@category.GetDisplayName()</option>
+                        }
+                    </select>
+                </div>
+                
+                <div class="col-md-2">
+                    <label for="condition" class="form-label">
+                        <i class="bi bi-award-fill me-1"></i>État
+                    </label>
+                    <select class="form-select" id="condition" name="condition">
+                        <option value="">Tous</option>
+                        @foreach (SneakerCondition condition in ViewBag.Conditions)
+                        {
+                            <option value="@condition" selected="@(selectedCondition == condition)">@condition.GetDisplayName()</option>
+                        }
+                    </select>
+                </div>
+                
+                <div class="col-md-2 d-flex align-items-end">
+                    <div class="d-flex gap-2 w-100">
+                        <button type="submit" class="btn btn-primary-custom flex-grow-1">
+                            <i class="bi bi-search me-1"></i>Filtrer
+                        </button>
+                        @if (hasFilters)
+                        {
+                            <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-lg"></i>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (hasFilters)
+    {
+        <!-- Filtres Actifs -->
+        <div class="mb-3">
+            <small class="text-muted">Filtres actifs :</small>
+            <div class="d-flex flex-wrap gap-2 mt-1">
+                @if (!string.IsNullOrEmpty(searchTerm))
+                {
+                    <span class="badge bg-primary">
+                        <i class="bi bi-search me-1"></i>"@searchTerm"
+                        <a href="@Url.Action("Index", new { brand = selectedBrand, category = selectedCategory, condition = selectedCondition })" class="text-white ms-1">
+                            <i class="bi bi-x"></i>
+                        </a>
+                    </span>
+                }
+                @if (selectedBrand.HasValue)
+                {
+                    <span class="badge bg-info">
+                        <i class="bi bi-tag-fill me-1"></i>@selectedBrand.Value.GetDisplayName()
+                        <a href="@Url.Action("Index", new { searchTerm, category = selectedCategory, condition = selectedCondition })" class="text-white ms-1">
+                            <i class="bi bi-x"></i>
+                        </a>
+                    </span>
+                }
+                @if (selectedCategory.HasValue)
+                {
+                    <span class="badge bg-warning text-dark">
+                        <i class="bi bi-grid-fill me-1"></i>@selectedCategory.Value.GetDisplayName()
+                        <a href="@Url.Action("Index", new { searchTerm, brand = selectedBrand, condition = selectedCondition })" class="text-dark ms-1">
+                            <i class="bi bi-x"></i>
+                        </a>
+                    </span>
+                }
+                @if (selectedCondition.HasValue)
+                {
+                    <span class="badge bg-success">
+                        <i class="bi bi-award-fill me-1"></i>@selectedCondition.Value.GetDisplayName()
+                        <a href="@Url.Action("Index", new { searchTerm, brand = selectedBrand, category = selectedCategory })" class="text-white ms-1">
+                            <i class="bi bi-x"></i>
+                        </a>
+                    </span>
+                }
+            </div>
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <!-- Aucun Résultat -->
+        <div class="text-center py-5">
+            <i class="bi bi-search text-muted" style="font-size: 4rem;"></i>
+            <h3 class="mt-3 text-muted">Aucune sneaker trouvée</h3>
+            <p class="text-muted mb-4">
+                @if (hasFilters)
+                {
+                    <span>Essayez de modifier vos critères de recherche</span>
+                }
+                else
+                {
+                    <span>Commencez par ajouter votre première sneaker à la collection</span>
+                }
+            </p>
+            <div class="d-flex gap-2 justify-content-center">
+                @if (hasFilters)
+                {
+                    <a href="@Url.Action("Index")" class="btn btn-outline-primary">
+                        <i class="bi bi-arrow-clockwise me-2"></i>Réinitialiser les filtres
+                    </a>
+                }
+                <a href="@Url.Action("Create")" class="btn btn-primary-custom">
+                    <i class="bi bi-plus-lg me-2"></i>Ajouter une Sneaker
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- Grille des Sneakers -->
+        <div class="row g-4">
+            @foreach (var sneaker in Model)
+            {
+                <div class="col-lg-4 col-md-6">
+                    <div class="card card-custom h-100">
+                        <div class="position-relative">
+                            <img src="@sneaker.DisplayImageUrl" class="card-img-top sneaker-image" alt="@sneaker.FullName" 
+                                 onerror="this.src='https://via.placeholder.com/300x200/f8f9fa/6c757d?text=👟'">
+                            
+                            @if (sneaker.IsLimited)
+                            {
+                                <span class="position-absolute top-0 end-0 m-2">
+                                    <span class="badge bg-warning text-dark">
+                                        <i class="bi bi-lightning-fill me-1"></i>Limited
+                                    </span>
+                                </span>
+                            }
+                        </div>
+                        
+                        <div class="card-body d-flex flex-column">
+                            <!-- Header avec état et prix -->
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <span class="@sneaker.ConditionBadgeClass">@sneaker.Condition.GetDisplayName()</span>
+                                <span class="price-tag">@sneaker.Price.ToString("C")</span>
+                            </div>
+                            
+                            <!-- Infos principales -->
+                            <h5 class="card-title fw-bold mb-2">@sneaker.Model</h5>
+                            <p class="text-muted mb-2">
+                                <i class="bi bi-tag-fill me-1"></i>@sneaker.Brand - "@sneaker.Colorway"
+                            </p>
+                            
+                            <!-- Détails -->
+                            <div class="row g-2 mb-3 small text-muted">
+                                <div class="col-6">
+                                    <i class="bi bi-rulers me-1"></i>Taille @sneaker.Size
+                                </div>
+                                <div class="col-6">
+                                    <i class="bi bi-grid-fill me-1"></i>@sneaker.Category.GetDisplayName()
+                                </div>
+                                @if (sneaker.StockQuantity.HasValue)
+                                {
+                                    <div class="col-6">
+                                        <i class="bi bi-box-seam me-1"></i>Stock: @sneaker.StockQuantity
+                                    </div>
+                                }
+                                <div class="col-6">
+                                    <i class="bi bi-calendar3 me-1"></i>@sneaker.ReleaseDate.Year
+                                </div>
+                            </div>
+                            
+                            <!-- Description -->
+                            @if (!string.IsNullOrEmpty(sneaker.Description))
+                            {
+                                <p class="card-text text-muted small mb-3" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                    @sneaker.Description
+                                </p>
+                            }
+                            
+                            <!-- Actions -->
+                            <div class="mt-auto">
+                                <div class="d-flex gap-2">
+                                    <a href="@Url.Action("Details", new { id = sneaker.Id })" class="btn btn-primary-custom btn-sm flex-grow-1">
+                                        <i class="bi bi-eye-fill me-1"></i>Détails
+                                    </a>
+                                    <a href="@Url.Action("Edit", new { id = sneaker.Id })" class="btn btn-outline-secondary btn-sm" title="Modifier">
+                                        <i class="bi bi-pencil-fill"></i>
+                                    </a>
+                                    <a href="@Url.Action("Delete", new { id = sneaker.Id })" class="btn btn-outline-danger btn-sm" title="Supprimer">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Footer avec date d'ajout -->
+                        <div class="card-footer bg-transparent border-top-0 pt-0">
+                            <small class="text-muted">
+                                <i class="bi bi-clock me-1"></i>Ajoutée le @sneaker.AddedDate.ToString("dd/MM/yyyy")
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Actions de fin -->
+        <div class="text-center mt-5">
+            <a href="@Url.Action("Create")" class="btn btn-primary-custom btn-lg">
+                <i class="bi bi-plus-lg me-2"></i>Ajouter une Nouvelle Sneaker
+            </a>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        // Auto-submit du formulaire de recherche avec delay
+        let searchTimeout;
+        document.getElementById('searchTerm').addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                this.form.submit();
+            }, 1000);
+        });
+
+        // Animation d'apparition des cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card-custom');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 50);
+            });
+        });
+    </script>
+}

@@ -1,0 +1,307 @@
+﻿@model Sneaker
+@{
+    ViewData["Title"] = $"Détails - {Model.FullName}";
+}
+
+<div class="container py-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="@Url.Action("Index", "Home")" class="text-decoration-none">
+                    <i class="bi bi-house-fill me-1"></i>Accueil
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="@Url.Action("Index")" class="text-decoration-none">Collection</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Model</li>
+        </ol>
+    </nav>
+
+    <div class="row g-5">
+        <!-- Image Section -->
+        <div class="col-lg-6">
+            <div class="card card-custom">
+                <div class="position-relative">
+                    <img src="@Model.DisplayImageUrl" class="card-img-top img-fluid" alt="@Model.FullName"
+                         style="height: 400px; object-fit: cover;"
+                         onerror="this.src='https://via.placeholder.com/600x400/f8f9fa/6c757d?text=@Uri.EscapeDataString(Model.FullName)'">
+
+                    @if (Model.IsLimited)
+                    {
+                        <div class="position-absolute top-0 end-0 m-3">
+                            <span class="badge bg-warning text-dark fs-6 px-3 py-2">
+                                <i class="bi bi-lightning-fill me-2"></i>Édition Limitée
+                            </span>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Galerie d'images (simulée pour la démo) -->
+            <div class="row g-2 mt-3">
+                <div class="col-3">
+                    <img src="@Model.DisplayImageUrl" class="img-fluid rounded border"
+                         style="height: 80px; object-fit: cover; cursor: pointer;"
+                         onclick="changeMainImage(this.src)">
+                </div>
+                <div class="col-3">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-center"
+                         style="height: 80px; cursor: pointer;">
+                        <i class="bi bi-plus-lg text-muted"></i>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-center"
+                         style="height: 80px; cursor: pointer;">
+                        <i class="bi bi-plus-lg text-muted"></i>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-center"
+                         style="height: 80px; cursor: pointer;">
+                        <i class="bi bi-plus-lg text-muted"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Détails Section -->
+        <div class="col-lg-6">
+            <!-- Header -->
+            <div class="mb-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <span class="@Model.ConditionBadgeClass fs-6 px-3 py-2">@Model.Condition.GetDisplayName()</span>
+                    <span class="price-tag" style="font-size: 2rem;">@Model.Price.ToString("C")</span>
+                </div>
+
+                <h1 class="display-5 fw-bold mb-2">@Model.Model</h1>
+                <h2 class="h4 text-muted mb-3">@Model.Brand - "@Model.Colorway"</h2>
+            </div>
+
+            <!-- Informations Principales -->
+            <div class="card card-custom mb-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="bi bi-info-circle-fill text-primary me-2"></i>Informations
+                    </h5>
+
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-tag-fill text-primary me-2"></i>
+                                <div>
+                                    <small class="text-muted d-block">Marque</small>
+                                    <strong>@Model.Brand.GetDisplayName()</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-grid-fill text-info me-2"></i>
+                                <div>
+                                    <small class="text-muted d-block">Catégorie</small>
+                                    <strong>@Model.Category.GetDisplayName()</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-rulers text-warning me-2"></i>
+                                <div>
+                                    <small class="text-muted d-block">Taille (US)</small>
+                                    <strong>@Model.Size</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-award-fill text-success me-2"></i>
+                                <div>
+                                    <small class="text-muted d-block">État</small>
+                                    <strong>@Model.Condition.GetDisplayName()</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-calendar3 text-danger me-2"></i>
+                                <div>
+                                    <small class="text-muted d-block">Date de sortie</small>
+                                    <strong>@Model.ReleaseDate.ToString("dd MMMM yyyy")</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (Model.StockQuantity.HasValue)
+                        {
+                            <div class="col-sm-6">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-box-seam text-secondary me-2"></i>
+                                    <div>
+                                        <small class="text-muted d-block">Quantité en stock</small>
+                                        <strong>@Model.StockQuantity</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description -->
+            @if (!string.IsNullOrEmpty(Model.Description))
+            {
+                <div class="card card-custom mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">
+                            <i class="bi bi-text-paragraph text-primary me-2"></i>Description
+                        </h5>
+                        <p class="card-text">@Model.Description</p>
+                    </div>
+                </div>
+            }
+
+            <!-- Métadonnées -->
+            <div class="card card-custom mb-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="bi bi-clock-fill text-primary me-2"></i>Historique
+                    </h5>
+
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-plus-circle text-success me-2"></i>
+                                <div>
+                                    <small class="text-muted d-block">Ajoutée le</small>
+                                    <strong>@Model.AddedDate.ToString("dd MMMM yyyy")</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-hash text-secondary me-2"></i>
+                                <div>
+                                    <small class="text-muted d-block">ID</small>
+                                    <strong>#@Model.Id.ToString("000")</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="d-grid gap-2">
+                <div class="btn-group" role="group">
+                    <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn btn-primary-custom btn-lg">
+                        <i class="bi bi-pencil-fill me-2"></i>Modifier
+                    </a>
+                    <a href="@Url.Action("Delete", new { id = Model.Id })" class="btn btn-outline-danger btn-lg">
+                        <i class="bi bi-trash-fill me-2"></i>Supprimer
+                    </a>
+                </div>
+
+                <div class="btn-group" role="group">
+                    <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Retour à la Collection
+                    </a>
+                    <a href="@Url.Action("Create")" class="btn btn-outline-custom">
+                        <i class="bi bi-plus-lg me-2"></i>Ajouter une Autre
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section Suggestions (sneakers similaires) -->
+    <div class="mt-5">
+        <h3 class="h4 mb-4">
+            <i class="bi bi-lightbulb-fill text-warning me-2"></i>Vous pourriez aussi aimer
+        </h3>
+
+        <div class="row g-4">
+            <!-- Cette section pourrait être alimentée par le controller avec des suggestions -->
+            <div class="col-lg-3 col-md-6">
+                <div class="card card-custom">
+                    <div class="card-body text-center">
+                        <i class="bi bi-plus-circle text-muted" style="font-size: 3rem;"></i>
+                        <h6 class="mt-3">Sneakers Similaires</h6>
+                        <p class="text-muted small">Découvrez d'autres modèles de la même marque ou catégorie</p>
+                        <a href="@Url.Action("Index", new { brand = Model.Brand })" class="btn btn-outline-custom btn-sm">
+                            Voir @Model.Brand.GetDisplayName()
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card card-custom">
+                    <div class="card-body text-center">
+                        <i class="bi bi-grid-fill text-muted" style="font-size: 3rem;"></i>
+                        <h6 class="mt-3">Même Catégorie</h6>
+                        <p class="text-muted small">Explorez d'autres sneakers @Model.Category.GetDisplayName()</p>
+                        <a href="@Url.Action("Index", new { category = Model.Category })" class="btn btn-outline-custom btn-sm">
+                            Voir @Model.Category.GetDisplayName()
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card card-custom">
+                    <div class="card-body text-center">
+                        <i class="bi bi-award-fill text-muted" style="font-size: 3rem;"></i>
+                        <h6 class="mt-3">Même État</h6>
+                        <p class="text-muted small">Autres sneakers en état @Model.Condition.GetDisplayName()</p>
+                        <a href="@Url.Action("Index", new { condition = Model.Condition })" class="btn btn-outline-custom btn-sm">
+                            Voir @Model.Condition.GetDisplayName()
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card card-custom">
+                    <div class="card-body text-center">
+                        <i class="bi bi-plus-lg text-muted" style="font-size: 3rem;"></i>
+                        <h6 class="mt-3">Ajouter une Sneaker</h6>
+                        <p class="text-muted small">Enrichissez votre collection</p>
+                        <a href="@Url.Action("Create")" class="btn btn-primary-custom btn-sm">
+                            Nouvelle Sneaker
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function changeMainImage(src) {
+            document.querySelector('.card-img-top').src = src;
+        }
+
+        // Animation d'entrée
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.card-custom, .breadcrumb');
+            elements.forEach((element, index) => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    element.style.transition = 'all 0.6s ease';
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }, index * 150);
+            });
+        });
+    </script>
+}
