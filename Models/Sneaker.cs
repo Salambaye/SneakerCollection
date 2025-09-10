@@ -67,6 +67,19 @@ namespace SneakerCollection.Models
         // Propriété calculée pour l'affichage
         public string FullName => $"{Brand} {Model} \"{Colorway}\"";
 
+        public string ConditionBadgeClass => Condition switch
+        {
+            SneakerCondition.DeadStock => "badge bg-success",
+            SneakerCondition.VeryNearDeadStock => "badge bg-primary",
+            SneakerCondition.NearMint => "badge bg-info",
+            SneakerCondition.Excellent => "badge bg-secondary",
+            SneakerCondition.VeryGood => "badge bg-warning",
+            SneakerCondition.Good => "badge bg-warning",
+            SneakerCondition.Fair => "badge bg-danger",
+            SneakerCondition.Poor => "badge bg-dark",
+            _ => "badge bg-secondary"
+        };
+
         // Propriété pour l'URL par défaut si aucune image
         public string DisplayImageUrl =>
             string.IsNullOrEmpty(ImageUrl)

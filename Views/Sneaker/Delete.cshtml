@@ -1,0 +1,94 @@
+﻿@model SneakerCollection.Models.Sneaker
+
+@{
+    ViewData["Title"] = "Supprimer une Sneaker";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h2 class="mb-0">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Confirmation de suppression
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger" role="alert">
+                        <h5 class="alert-heading">
+                            <i class="fas fa-warning me-2"></i>
+                            Êtes-vous sûr(e) de vouloir supprimer cette sneaker ?
+                        </h5>
+                        <p class="mb-0">
+                            Cette action est irréversible. La sneaker sera définitivement retirée de votre collection.
+                        </p>
+                    </div>
+
+                    <!-- Affichage des détails de la sneaker -->
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                            {
+                                <img src="@Model.ImageUrl" alt="@Model.Brand @Model.Model"
+                                     class="img-fluid rounded shadow-sm">
+                            }
+                            else
+                            {
+                                <div class="bg-light rounded d-flex align-items-center justify-content-center"
+                                     style="height: 250px;">
+                                    <i class="fas fa-image text-muted fa-4x"></i>
+                                </div>
+                            }
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h4 class="card-title text-primary mb-3">
+                                        @Model.Brand @Model.Model
+                                    </h4>
+
+                                    <div class="row g-3">
+                                        <div class="col-sm-6">
+                                            <strong>Coloris :</strong>
+                                            <br><span class="text-muted">@Model.Colorway</span>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <strong>Taille :</strong>
+                                            <br><span class="text-muted">US @Model.Size</span>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <strong>Prix :</strong>
+                                            <br><span class="text-success fw-bold">€@Model.Price.ToString("F2")</span>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <strong>État :</strong>
+                                            <br>
+                                            @switch (Model.Condition)
+                                            {
+                                                case SneakerCondition.DeadStock:
+                                                    <span class="badge bg-success">@Model.Condition</span>
+                                                    break;
+                                               
+                                                case SneakerCondition.NearMint:
+                                                    <span class="badge bg-info">@Model.Condition</span>
+                                                    break;
+                                                case SneakerCondition.Excellent:
+                                                case SneakerCondition.VeryGood:
+                                                    <span class="badge bg-primary">@Model.Condition</span>
+                                                    break;
+                                                default:
+                                                    <span class="badge bg-warning">@Model.Condition</span>
+                                                    break;
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

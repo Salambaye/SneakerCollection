@@ -233,15 +233,70 @@
             </div>
         </div>
     </section>
+
 </div>
 
 @section Scripts {
     <script>
-        // Extension pour les Display Names
+        // Extension pour afficher les Display Names en français
         if (!String.prototype.getDisplayName) {
             String.prototype.getDisplayName = function() {
                 return this.replace(/([A-Z])/g, ' $1').trim();
             };
         }
+
+        $(document).ready(function() {
+            // Initialisation des tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+
+            // Filtrage rapide
+            $('[data-filter]').click(function() {
+                var filter = $(this).data('filter');
+                $('[data-filter]').removeClass('active');
+                $(this).addClass('active');
+
+                $('.sneaker-item').each(function() {
+                    var item = $(this);
+                    var show = false;
+                    switch(filter) {
+                        case 'all': show = true; break;
+                        case 'deadstock': show = item.data('condition') === 'deadstock'; break;
+                        case 'limited': show = item.data('limited') === 'true'; break;
+                    }
+                    if (show) item.show().addClass('animate__animated animate__fadeIn');
+                    else item.hide();
+                });
+            });
+
+            // Tri
+            $('#sortOptions').change(function() {
+                var sortBy = $(this).val();
+                var items = $('.sneaker-item').get();
+                items.sort(function(a,b){
+                    var $a=$(a), $b=$(b);
+                    switch(sortBy){
+                        case 'newest': return $b.data('added')-$a.data('added');
+                        case 'oldest': return $a.data('added')-$b.data('added');
+                        case 'price-high': return parseFloat($b.data('price'))-parseFloat($a.data('price'));
+                        case 'price-low': return parseFloat($a.data('price'))-parseFloat($b.data('price'));
+                        case 'brand': return $a.data('brand').localeCompare($b.data('brand'));
+                        case 'condition':
+                            var order = {'deadstock':1,'verynearMint':2,'nearmint':3,'excellent':4,'verygood':5,'good':6,'fair':7,'poor':8};
+                            return (order[$a.data('condition')]||9)-(order[$b.data('condition')]||9);
+                        default: return 0;
+                    }
+                });
+                $.each(items,function(i,item){$('#sneakersGrid').append(item);});
+            });
+
+            // Effets au survol
+            $('.sneaker-card-hover').hover(
+                function(){ $(this).addClass('shadow-lg').css('transform','translateY(-5px)'); },
+                function(){ $(this).removeClass('shadow-lg').css('transform','translateY(0)'); }
+            ).css({'transition':'all 0.3s ease-in-out','cursor':'pointer'});
+        });
     </script>
 }

@@ -75,7 +75,7 @@ namespace SneakerCollection.Controllers
                     TempData["SuccessMessage"] = $"La sneaker '{sneaker.FullName}' a été ajoutée avec succès !";
                     return RedirectToAction(nameof(Index));
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     ModelState.AddModelError("", "Une erreur s'est produite lors de l'ajout de la sneaker.");
                 }
@@ -125,7 +125,7 @@ namespace SneakerCollection.Controllers
                     TempData["SuccessMessage"] = $"La sneaker '{sneaker.FullName}' a été modifiée avec succès !";
                     return RedirectToAction(nameof(Details), new { id = sneaker.Id });
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     ModelState.AddModelError("", "Une erreur s'est produite lors de la modification de la sneaker.");
                 }
@@ -170,7 +170,7 @@ namespace SneakerCollection.Controllers
                     TempData["ErrorMessage"] = "Sneaker non trouvée.";
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 TempData["ErrorMessage"] = "Une erreur s'est produite lors de la suppression de la sneaker.";
             }

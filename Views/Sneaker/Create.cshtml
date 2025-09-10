@@ -1,0 +1,315 @@
+﻿@model Sneaker
+@{
+    ViewData["Title"] = "Ajouter une Sneaker";
+}
+
+<div class="container py-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="@Url.Action("Index", "Home")" class="text-decoration-none">
+                    <i class="bi bi-house-fill me-1"></i>Accueil
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="@Url.Action("Index")" class="text-decoration-none">Collection</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Ajouter</li>
+        </ol>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Header -->
+            <div class="text-center mb-5">
+                <h1 class="display-6 fw-bold mb-3">
+                    <i class="bi bi-plus-circle-fill text-primary me-3"></i>Ajouter une Sneaker
+                </h1>
+                <p class="text-muted">Enrichissez votre collection avec un nouveau modèle</p>
+            </div>
+
+            <!-- Formulaire -->
+            <div class="card card-custom">
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger alert-custom" role="alert"></div>
+
+                        <div class="row g-4">
+                            <!-- Section Identification -->
+                            <div class="col-12">
+                                <h5 class="border-bottom pb-2 mb-3">
+                                    <i class="bi bi-tag-fill text-primary me-2"></i>Identification
+                                </h5>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Brand" class="form-label fw-semibold">
+                                    <i class="bi bi-bookmark-fill me-1"></i>Marque
+                                </label>
+                                <select asp-for="Brand" class="form-select" asp-items="Html.GetEnumSelectList<SneakerBrand>()">
+                                    <option value="">Sélectionner une marque</option>
+                                </select>
+                                <span asp-validation-for="Brand" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Model" class="form-label fw-semibold">
+                                    <i class="bi bi-card-text me-1"></i>Modèle
+                                </label>
+                                <input asp-for="Model" class="form-control" placeholder="ex: Air Jordan 1, Air Max 90...">
+                                <span asp-validation-for="Model" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Colorway" class="form-label fw-semibold">
+                                    <i class="bi bi-palette-fill me-1"></i>Colorway
+                                </label>
+                                <input asp-for="Colorway" class="form-control" placeholder="ex: Chicago, Bred, Triple White...">
+                                <span asp-validation-for="Colorway" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Category" class="form-label fw-semibold">
+                                    <i class="bi bi-grid-fill me-1"></i>Catégorie
+                                </label>
+                                <select asp-for="Category" class="form-select" asp-items="Html.GetEnumSelectList<SneakerCategory>()">
+                                    <option value="">Sélectionner une catégorie</option>
+                                </select>
+                                <span asp-validation-for="Category" class="text-danger small"></span>
+                            </div>
+
+                            <!-- Section Détails Techniques -->
+                            <div class="col-12 mt-5">
+                                <h5 class="border-bottom pb-2 mb-3">
+                                    <i class="bi bi-gear-fill text-success me-2"></i>Détails Techniques
+                                </h5>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label asp-for="Size" class="form-label fw-semibold">
+                                    <i class="bi bi-rulers me-1"></i>Taille (US)
+                                </label>
+                                <input asp-for="Size" type="number" step="0.5" min="3" max="18" class="form-control" placeholder="9.0">
+                                <span asp-validation-for="Size" class="text-danger small"></span>
+                                <div class="form-text">Taille américaine (ex: 9, 9.5, 10)</div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label asp-for="Price" class="form-label fw-semibold">
+                                    <i class="bi bi-currency-euro me-1"></i>Prix (€)
+                                </label>
+                                <input asp-for="Price" type="number" step="0.01" min="0.01" class="form-control" placeholder="150.00">
+                                <span asp-validation-for="Price" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label asp-for="Condition" class="form-label fw-semibold">
+                                    <i class="bi bi-award-fill me-1"></i>État
+                                </label>
+                                <select asp-for="Condition" class="form-select" asp-items="Html.GetEnumSelectList<SneakerCondition>()">
+                                    <option value="">Sélectionner l'état</option>
+                                </select>
+                                <span asp-validation-for="Condition" class="text-danger small"></span>
+                            </div>
+
+                            <!-- Section Dates et Stock -->
+                            <div class="col-12 mt-5">
+                                <h5 class="border-bottom pb-2 mb-3">
+                                    <i class="bi bi-calendar-fill text-warning me-2"></i>Dates et Inventaire
+                                </h5>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="ReleaseDate" class="form-label fw-semibold">
+                                    <i class="bi bi-calendar3 me-1"></i>Date de sortie
+                                </label>
+                                <input asp-for="ReleaseDate" type="date" class="form-control">
+                                <span asp-validation-for="ReleaseDate" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="StockQuantity" class="form-label fw-semibold">
+                                    <i class="bi bi-box-seam me-1"></i>Quantité en stock
+                                </label>
+                                <input asp-for="StockQuantity" type="number" min="0" max="1000" class="form-control" placeholder="1">
+                                <span asp-validation-for="StockQuantity" class="text-danger small"></span>
+                                <div class="form-text">Laissez vide si non applicable</div>
+                            </div>
+
+                            <!-- Section Médias et Description -->
+                            <div class="col-12 mt-5">
+                                <h5 class="border-bottom pb-2 mb-3">
+                                    <i class="bi bi-image-fill text-info me-2"></i>Médias et Description
+                                </h5>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="ImageUrl" class="form-label fw-semibold">
+                                    <i class="bi bi-link-45deg me-1"></i>URL de l'image
+                                </label>
+                                <input asp-for="ImageUrl" type="url" class="form-control" placeholder="https://example.com/image.jpg">
+                                <span asp-validation-for="ImageUrl" class="text-danger small"></span>
+                                <div class="form-text">URL d'une image en ligne (optionnel)</div>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="Description" class="form-label fw-semibold">
+                                    <i class="bi bi-text-paragraph me-1"></i>Description
+                                </label>
+                                <textarea asp-for="Description" class="form-control" rows="4" placeholder="Décrivez cette sneaker, son histoire, ses particularités..."></textarea>
+                                <span asp-validation-for="Description" class="text-danger small"></span>
+                                <div class="form-text"><span id="descriptionCount">0</span>/500 caractères</div>
+                            </div>
+
+                            <!-- Section Options -->
+                            <div class="col-12 mt-5">
+                                <h5 class="border-bottom pb-2 mb-3">
+                                    <i class="bi bi-toggles me-2"></i>Options
+                                </h5>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="form-check form-switch">
+                                    <input asp-for="IsLimited" class="form-check-input" type="checkbox" role="switch">
+                                    <label asp-for="IsLimited" class="form-check-label fw-semibold">
+                                        <i class="bi bi-lightning-fill me-1"></i>Édition limitée
+                                    </label>
+                                    <div class="form-text">Cochez si cette sneaker est une édition limitée ou collaboration</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="row mt-5 pt-4 border-top">
+                            <div class="col-12">
+                                <div class="d-flex gap-3 justify-content-between">
+                                    <a href="@Url.Action("Index")" class="btn btn-outline-secondary btn-lg">
+                                        <i class="bi bi-arrow-left me-2"></i>Annuler
+                                    </a>
+
+                                    <div class="d-flex gap-2">
+                                        <button type="reset" class="btn btn-outline-warning btn-lg">
+                                            <i class="bi bi-arrow-clockwise me-2"></i>Réinitialiser
+                                        </button>
+                                        <button type="submit" class="btn btn-primary-custom btn-lg" onclick="showLoading(this)">
+                                            <i class="bi bi-plus-lg me-2"></i>Ajouter la Sneaker
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Aperçu en temps réel (optionnel) -->
+            <div class="card card-custom mt-4" style="display: none;" id="previewCard">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="bi bi-eye-fill me-2"></i>Aperçu
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img id="previewImage" src="https://via.placeholder.com/200x150/f8f9fa/6c757d?text=Sneaker"
+                                 class="img-fluid rounded" alt="Aperçu">
+                        </div>
+                        <div class="col-md-8">
+                            <h5 id="previewTitle" class="fw-bold">Nom de la sneaker</h5>
+                            <p id="previewBrand" class="text-muted">Marque - Colorway</p>
+                            <div class="d-flex gap-2">
+                                <span id="previewPrice" class="badge bg-primary">Prix</span>
+                                <span id="previewCondition" class="badge bg-secondary">État</span>
+                                <span id="previewLimited" class="badge bg-warning text-dark" style="display: none;">
+                                    <i class="bi bi-lightning-fill"></i> Limited
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Compteur de caractères pour la description
+            const descriptionTextarea = $('#Description');
+            const countSpan = $('#descriptionCount');
+
+            descriptionTextarea.on('input', function() {
+                const length = this.value.length;
+                countSpan.text(length);
+
+                if (length > 450) {
+                    countSpan.removeClass('text-muted').addClass('text-warning');
+                } else if (length > 500) {
+                    countSpan.removeClass('text-warning').addClass('text-danger');
+                } else {
+                    countSpan.removeClass('text-warning text-danger').addClass('text-muted');
+                }
+            });
+
+            // Aperçu en temps réel
+            function updatePreview() {
+                const model = $('#Model').val();
+                const brand = $('#Brand option:selected').text();
+                const colorway = $('#Colorway').val();
+                const price = $('#Price').val();
+                const condition = $('#Condition option:selected').text();
+                const imageUrl = $('#ImageUrl').val();
+                const isLimited = $('#IsLimited').is(':checked');
+
+                if (model || brand !== 'Sélectionner une marque' || colorway) {
+                    $('#previewCard').show();
+
+                    $('#previewTitle').text(model || 'Nom du modèle');
+                    $('#previewBrand').text((brand !== 'Sélectionner une marque' ? brand : 'Marque') +
+                                           (colorway ? ` - "${colorway}"` : ''));
+                    $('#previewPrice').text(price ? price + '€' : 'Prix');
+                    $('#previewCondition').text(condition !== 'Sélectionner l\'état' ? condition : 'État');
+
+                    if (imageUrl) {
+                        $('#previewImage').attr('src', imageUrl);
+                    }
+
+                    if (isLimited) {
+                        $('#previewLimited').show();
+                    } else {
+                        $('#previewLimited').hide();
+                    }
+                } else {
+                    $('#previewCard').hide();
+                }
+            }
+
+            // Événements pour l'aperçu
+            $('#Model, #Colorway, #Price, #ImageUrl').on('input', updatePreview);
+            $('#Brand, #Condition').on('change', updatePreview);
+            $('#IsLimited').on('change', updatePreview);
+
+            // Validation en temps réel
+            $('input[required], select[required]').on('blur', function() {
+                if (!this.value) {
+                    $(this).addClass('is-invalid');
+                } else {
+                    $(this).removeClass('is-invalid').addClass('is-valid');
+                }
+            });
+
+            // Animation d'entrée
+            $('.card-custom').hide().fadeIn(800);
+        });
+
+        // Réinitialiser le formulaire
+        $('button[type="reset"]').on('click', function() {
+            $('#previewCard').hide();
+            $('.is-valid, .is-invalid').removeClass('is-valid is-invalid');
+            $('#descriptionCount').text('0').removeClass('text-warning text-danger').addClass('text-muted');
+        });
+    </script>
+}

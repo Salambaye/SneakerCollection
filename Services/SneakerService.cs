@@ -80,6 +80,20 @@ namespace SneakerCollection.Services
             return query.OrderByDescending(s => s.AddedDate);
         }
 
+        public IEnumerable<Sneaker> GetFeaturedSneakers()
+        {
+            return _sneakers
+                .Where(s => s.IsLimited || s.Price > 200)
+                .OrderByDescending(s => s.Price)
+                .Take(4);
+        }
+
+        public IEnumerable<Sneaker> GetRecentSneakers(int count = 6)
+        {
+            return _sneakers
+                .OrderByDescending(s => s.AddedDate)
+                .Take(count);
+        }
         public int GetNextId()
         {
             return _sneakers.Any() ? _sneakers.Max(s => s.Id) + 1 : 1;
@@ -118,7 +132,7 @@ namespace SneakerCollection.Services
                     Category = SneakerCategory.Lifestyle,
                     ReleaseDate = new DateTime(2021, 9, 18),
                     AddedDate = DateTime.Now.AddDays(-25),
-                    ImageUrl = "https://images.stockx.com/images/Nike-Air-Max-1-Patta-Waves.jpg",
+                    ImageUrl = "https://www.sneakerstyle.fr/wp-content/uploads/2021/10/patta-x-nike-air-max-1-noise-aqua-DH1348-004.jpg",
                     Description = "Collaboration exclusive entre Nike et Patta avec un design inspiré des vagues.",
                     IsLimited = true,
                     StockQuantity = 1
@@ -130,12 +144,12 @@ namespace SneakerCollection.Services
                     Model = "Yeezy Boost 350 V2",
                     Colorway = "Zebra",
                     Size = 10.0m,
-                    Price = 280.00m,
+                    Price = 80.00m,
                     Condition = SneakerCondition.VeryGood,
                     Category = SneakerCategory.Lifestyle,
                     ReleaseDate = new DateTime(2017, 2, 25),
                     AddedDate = DateTime.Now.AddDays(-20),
-                    ImageUrl = "https://images.stockx.com/images/Adidas-Yeezy-Boost-350-V2-Zebra.jpg",
+                    ImageUrl = "https://www.sneakers.fr/wp-content/uploads/2017/01/adidas-yeezy-boost-350V2-Zebra-8-380x380.jpeg",
                     Description = "L'un des colorways les plus populaires de la Yeezy 350 V2.",
                     IsLimited = true,
                     StockQuantity = 3
@@ -224,5 +238,7 @@ namespace SneakerCollection.Services
                 }
             };
         }
+
+       
     }
 }
