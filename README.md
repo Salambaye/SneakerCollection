@@ -14,6 +14,13 @@ This project is a web application developed using **ASP.NET Core MVC**, **C#**, 
 ## Features
 
 - **CRUD Operations:** Users can create, view, update, and delete sneakers.
+  - **Create**: Add a new sneaker with all its properties (brand, model, size, colorway, price, etc.).
+  - **Read**: View sneaker details in a dedicated page, with a clean Bootstrap layout and image preview.
+  - **Update**: Edit an existing sneaker’s information via a structured form (with enums, dates, and validations).
+  - **Delete**: Remove a sneaker from the collection.  
+     - The system always asks for confirmation before deletion, preventing accidental removals.  
+     - Once confirmed, the sneaker is permanently removed from the in-memory list.
+       
 - **Search Functionality:** Users can search sneakers by brand, model, or category.
 - **Data Types Used:** Various data types are handled, including:
   - `String` (e.g., Model, Colorway)
