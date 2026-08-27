@@ -18,4 +18,8 @@ COPY --from=build /app .
 # Render fournit le port d'écoute via la variable d'environnement PORT
 ENV ASPNETCORE_URLS=http://+:$PORT
 
+# Désactive le rechargement automatique de la config (FileSystemWatcher / inotify),
+# qui plante sur Render à cause du quota limité de file descriptors du conteneur
+ENV DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE=false
+
 ENTRYPOINT ["dotnet", "SneakerCollection.dll"]
